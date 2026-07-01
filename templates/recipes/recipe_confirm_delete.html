@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+Supprimer {{ object.title }}
+{% endblock %}
+
+{% block content %}
+<h1>Supprimer la recette</h1>
+
+<p>Voulez-vous vraiment supprimer la recette « {{ object.title }} » ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+    <a href="{% url 'recipe_detail' object.pk %}">Annuler</a>
+</form>
+{% endblock %}

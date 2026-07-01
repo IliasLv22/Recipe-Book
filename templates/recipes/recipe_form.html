@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}
+{% if view.object %}
+    Modifier: {{ view.object.title }}
+{% else %}
+    Nouvelle recette
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-lg rounded-3">
+            <div class="card-header" style="background: linear-gradient(90deg, #FF6B6B 0%, #4ECDC4 100%); color: white; border: none; border-radius: 12px 12px 0 0;">
+                <h2 class="mb-0">
+                    {% if view.object %}
+                        <i class="fas fa-edit"></i> Modifier: {{ view.object.title }}
+                    {% else %}
+                        <i class="fas fa-plus"></i> Créer une recette
+                    {% endif %}
+                </h2>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" id="recipeForm">
+                    {% csrf_token %}
+
+                    <!-- Titre -->
+                    <div class="mb-4">
+                        <label for="{{ form.title.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-heading"></i> {{ form.title.label }}
+                        </label>
+                        {{ form.title|add_class:"form-control form-control-lg" }}
+                        {% if form.title.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.title.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="mb-4">
+                        <label for="{{ form.category.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-folder"></i> {{ form.category.label }}
+                        </label>
+                        {{ form.category|add_class:"form-select form-select-lg" }}
+                        {% if form.category.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.category.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-align-left"></i> {{ form.description.label }}
+                        </label>
+                        {{ form.description|add_class:"form-control" }}
+                        {% if form.description.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.description.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Times -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.preparation_time.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-clock"></i> {{ form.preparation_time.label }}
+                            </label>
+                            {{ form.preparation_time|add_class:"form-control form-control-lg" }}
+                            <small class="text-muted d-block mt-2">en minutes</small>
+                            {% if form.preparation_time.errors %}
+                                <div class="alert alert-danger alert-sm mt-2 py-2">
+                                    {% for error in form.preparation_time.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.cooking_time.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-fire"></i> {{ form.cooking_time.label }}
+                            </label>
+                            {{ form.cooking_time|add_class:"form-control form-control-lg" }}
+                            <small class="text-muted d-block mt-2">en minutes (optionnel)</small>
+                            {% if form.cooking_time.errors %}
+                                <div class="alert alert-danger alert-sm mt-2 py-2">
+                                    {% for error in form.cooking_time.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Cost & Image -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.estimated_cost.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-euro-sign"></i> {{ form.estimated_cost.label }}
+                            </label>
+                            {{ form.estimated_cost|add_class:"form-control form-control-lg" }}
+                            <small class="text-muted d-block mt-2">en euros (optionnel)</small>
+                            {% if form.estimated_cost.errors %}
+                                <div class="alert alert-danger alert-sm mt-2 py-2">
+                                    {% for error in form.estimated_cost.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="{{ form.image.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-image"></i> {{ form.image.label }}
+                            </label>
+                            {{ form.image|add_class:"form-control form-control-lg" }}
+                            <small class="text-muted d-block mt-2">optionnel</small>
+                            {% if form.image.errors %}
+                                <div class="alert alert-danger alert-sm mt-2 py-2">
+                                    {% for error in form.image.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-4">
+                        <label for="{{ form.tags.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-tags"></i> {{ form.tags.label }}
+                        </label>
+                        {{ form.tags|add_class:"form-control form-control-lg" }}
+                        <small class="text-muted d-block mt-2">séparés par des virgules: vegan, sans-gluten, rapide, etc. (optionnel)</small>
+                        {% if form.tags.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.tags.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="mb-4">
+                        <label for="{{ form.ingredients.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-list"></i> {{ form.ingredients.label }}
+                        </label>
+                        <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9;">
+                            {{ form.ingredients }}
+                        </div>
+                        {% if form.ingredients.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.ingredients.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Private Notes -->
+                    <div class="mb-4">
+                        <label for="{{ form.private_notes.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note"></i> {{ form.private_notes.label }}
+                        </label>
+                        {{ form.private_notes|add_class:"form-control" }}
+                        <small class="text-muted d-block mt-2">notes visibles uniquement par vous (optionnel)</small>
+                        {% if form.private_notes.errors %}
+                            <div class="alert alert-danger alert-sm mt-2 py-2">
+                                {% for error in form.private_notes.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-lg rounded-3" style="background: linear-gradient(90deg, #FF6B6B 0%, #4ECDC4 100%); color: white; border: none; font-weight: 600;">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary rounded-3">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #FF6B6B;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+    }
+
+    .form-check {
+        padding: 10px;
+        margin-bottom: 5px;
+        background: white;
+        border-radius: 5px;
+    }
+
+    .form-check-input:checked {
+        background-color: #FF6B6B;
+        border-color: #FF6B6B;
+    }
+</style>
+
+{% endblock %}
