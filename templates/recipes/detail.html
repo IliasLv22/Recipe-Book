@@ -133,7 +133,7 @@
         </div>
 
         <!-- Action Buttons -->
-        {% if user.is_authenticated and recipe.author == user %}
+        {% if user.is_authenticated %}
             <div class="d-grid gap-2">
                 <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-warning btn-lg rounded-3">
                     <i class="fas fa-edit"></i> Modifier

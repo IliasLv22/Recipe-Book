@@ -49,14 +49,8 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "recipes/recipe_form.html"
     success_url = reverse_lazy("home")
 
-    def get_queryset(self):
-        return Recipe.objects.filter(author=self.request.user)
-
 
 class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     model = Recipe
     template_name = "recipes/recipe_confirm_delete.html"
     success_url = reverse_lazy("home")
-
-    def get_queryset(self):
-        return Recipe.objects.filter(author=self.request.user)
